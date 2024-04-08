@@ -106,3 +106,32 @@ class CupcakeViewsTestCase(TestCase):
 
             self.assertIsNotNone(new_cupcake)
             self.assertIsInstance(new_cupcake.id, int)
+
+def test_update_cupcake(self):
+    with app.test_client() as client:
+        url = f'/api/cupcakes/{self.cupcake.id}'
+        resp = client.patch(url, json={'flavor': 'UpdatedFlavor'})
+
+        self.assertEqual(resp.status_code, 200)
+
+        data = resp.json
+        self.assertIn('cupcake', data)
+        self.assertEqual(data['cupcake']['flavor'], 'UpdatedFlavor')
+
+        updated_cupcake = Cupcake.query.get(self.cupcake.id)
+        self.assertEqual(updated_cupcake.flavor, 'UpdatedFlavor')
+
+
+def test_delete_cupcake(self):
+    with app.test_client() as client:
+        url = f'/api/cupcakes/{self.cupcake.id}'
+        resp = client.delete(url)
+
+        self.assertEqual(resp.status_code, 200)
+
+        data = resp.json
+        self.assertIn('message',data)
+        self.assertEqual(data['message'], 'Cupcake deleted!')
+
+        deleted_cupcake = Cupcake.query.get(self.cupcake.id)
+        self.assertIsNone(deleted_cupcake)
