@@ -1,8 +1,9 @@
 """Models for Cupcake app."""
 
-from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+from app import db
+
+
 
 def connect_db(app):
     """Connect to database"""
@@ -16,7 +17,7 @@ class Cupcake(db.Model):
     __tablename__ = 'cupcakes'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    flavor = db.Coumn(db.Text, nullable=False)
-    size = db.Coumn(db.Text, nullable=False)
-    rating = db.Coumn(db.Float, nullable=False)
-    image = db.Coumn(db.Text, default='https://tinyurl.com/demo-cupcake')
+    flavor = db.Column(db.Text, nullable=False)
+    size = db.Column(db.Text, nullable=False)
+    rating = db.Column(db.Float, nullable=False)
+    image = db.Column(db.Text, default='https://tinyurl.com/demo-cupcake')
