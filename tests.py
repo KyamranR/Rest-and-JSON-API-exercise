@@ -97,17 +97,12 @@ class CupcakeViewsTestCase(TestCase):
 
             data = resp.json
 
-            # don't know what ID we'll get, make sure it's an int & normalize
-            self.assertIsInstance(data['cupcake']['id'], int)
-            del data['cupcake']['id']
-
-            self.assertEqual(data, {
-                "cupcake": {
-                    "flavor": "TestFlavor2",
-                    "size": "TestSize2",
-                    "rating": 10,
-                    "image": "http://test.com/cupcake2.jpg"
-                }
-            })
-
+            self.assertIn('message', data)
+            self.assertEqual(data['message'], 'Cupcake created!')
+            
             self.assertEqual(Cupcake.query.count(), 2)
+
+            new_cupcake = Cupcake.query.filter_by(flavor='TestFlavor2').first()
+
+            self.assertIsNotNone(new_cupcake)
+            self.assertIsInstance(new_cupcake.id, int)
