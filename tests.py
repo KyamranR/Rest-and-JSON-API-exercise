@@ -1,5 +1,5 @@
 from unittest import TestCase
-
+from flask import current_app
 from app import app
 from models import db, Cupcake
 
@@ -10,8 +10,7 @@ app.config['SQLALCHEMY_ECHO'] = False
 # Make Flask errors be real errors, rather than HTML pages with error info
 app.config['TESTING'] = True
 
-db.drop_all()
-db.create_all()
+
 
 
 CUPCAKE_DATA = {
@@ -35,7 +34,10 @@ class CupcakeViewsTestCase(TestCase):
     def setUp(self):
         """Make demo data."""
 
-        Cupcake.query.delete()
+        self.app_context = app.app_context()
+        self.app_context.push()
+        db.drop_all()
+        db.create_all()
 
         cupcake = Cupcake(**CUPCAKE_DATA)
         db.session.add(cupcake)
@@ -47,6 +49,8 @@ class CupcakeViewsTestCase(TestCase):
         """Clean up fouled transactions."""
 
         db.session.rollback()
+
+        self.app_context.pop()
 
     def test_list_cupcakes(self):
         with app.test_client() as client:
