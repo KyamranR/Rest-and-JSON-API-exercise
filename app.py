@@ -23,8 +23,34 @@ def get_cupcakes():
         'image': cupcakes.image} for cupcake in cupcakes]
     return jsonify(cupcakes=cupcakes_data)
 
+@app.route('/api/cupcakes/<int:cupcake_id>', methods=['GET'])
+def get_cupcake(cupcake_id):
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+    cupcake_data = {
+        'id': cupcake.id,
+        'flavor': cupcake.flavor,
+        'size': cupcake.size,
+        'rating': cupcake.rating,
+        'image': cupcake.image
+    }
+    return jsonify(cupcake=cupcake_data)
 
+@app.route('/api/cupcakes', methods=['POST'])
+def create_cupcake():
+    data = request.json
+    flavor = data.get('flavor')
+    size = data.get('size')
+    rating = data.get('rating')
+    image = data.get('image')
 
+    if not flavor or not size or not rating:
+        return jsonify(error='Flavor, size, and rating are required'), 400
+    
+    cupcake = Cupcake(flavor=flavor, size=size, rating=rating, image=image)
+    db.session.add(cupcake)
+    db.session.commit()
+
+    return jsonify(message='Cupcake created!'), 201
 
 
 if __name__ == '__main__':
