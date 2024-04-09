@@ -39,6 +39,7 @@ $(document).ready(function () {
       .then(function (response) {
         console.log("Cupcakes added:", response.data);
         loadCupcakes();
+        $("#cupcake-form")[0].reset();
       })
       .catch(function (error) {
         console.error("Error adding cupcake: ", error);
