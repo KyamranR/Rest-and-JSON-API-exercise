@@ -3,9 +3,9 @@ $(document).ready(function () {
     axios
       .get("/api/cupcakes")
       .then(function (response) {
-        $("#cupcakes-list").empty();
+        $(".cupcakes-list").empty();
         response.data.cupcakes.forEach((cupcake) => {
-          $("#cupcakes-list").append(`
+          $(".cupcakes-list").append(`
                         <div>
                             <p>Flavor: ${cupcake.flavor}</p>
                             <p>Size: ${cupcake.size}</p>
